@@ -5,8 +5,27 @@ Meteor.publish('postsList', function(terms) {
     var parameters = getPostsParameters(terms),
         posts = Posts.find(parameters.find, parameters.options);
 
-    return posts;
+    var newPosts = []
+
+    _.each(posts.fetch(), function(p) {
+
+      if (!p.roles || p.length == 0) {
+        newPosts.push(p._id)
+        return
+      }
+
+      //console.log(p.roles)
+
+      if (Roles.userIsInRole(Meteor.userId(), p.roles)) {
+        newPosts.push(p._id)
+      }
+    });
+
+
+    return Posts.find({_id: {$in: newPosts }})
+
   }
+
   return [];
 });
 
