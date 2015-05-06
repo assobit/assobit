@@ -1,17 +1,20 @@
 <template name="editRoles">
+  {{#if isAdmin}}
+
   <div class="grid-small grid-block dialog admin">
     <h3>Roles</h3>
-    
+
     <form class="add-role">
     	<input type="text" name="role" placeholder="Type to add a new role" />
   	</form>
-	
+
 	<br>
-  	
+
   	{{#each roles}}
   		<li> <b> {{this}} </b> </li>
   	{{/each}}
   </div>
-  	
+
+  {{/if}}
 
 </template>
