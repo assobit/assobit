@@ -7,6 +7,8 @@ Meteor.publish('postsList', function(terms) {
 
     var newPosts = []
 
+    var userId = this.userId || Meteor.userId()
+
     _.each(posts.fetch(), function(p) {
 
       if (!p.roles || p.length == 0) {
@@ -14,9 +16,7 @@ Meteor.publish('postsList', function(terms) {
         return
       }
 
-      //console.log(p.roles)
-
-      if (Roles.userIsInRole(Meteor.userId(), p.roles)) {
+      if (Roles.userIsInRole(userId, p.roles)) {
         newPosts.push(p._id)
       }
     });
