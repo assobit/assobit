@@ -5,7 +5,7 @@ Meteor.startup(function () {
 
 	    var role = event.target.role.value;
 
-	    Meteor.call("updateRoles", Meteor.user()._id, role);
+	    Meteor.call("updateRoles", Meteor.users.findOne({slug: Session.get("userSlug")})._id, role);
 
 	    // Clear form
 	    event.target.text.value = "";
@@ -18,8 +18,8 @@ Meteor.startup(function () {
 
 	Template[getTemplate('editRoles')].helpers({
 		roles: function() {
-			return Meteor.user().roles
+			return Meteor.users.findOne({slug: Session.get("userSlug")}).roles
 		}
-	})  
+	})
 
 });
