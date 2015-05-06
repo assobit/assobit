@@ -12,7 +12,17 @@ Meteor.startup(function () {
 
 	    // Prevent default form submit
 	    return false;
-	  }
+	  },
+
+    "click .remove-role": function (event) {
+
+      var role = event.target.id;
+
+      Meteor.call("removeRole", Meteor.users.findOne({slug: Session.get("userSlug")})._id, role);
+
+      // Prevent default form submit
+      return false;
+    }
 
 	});
 
