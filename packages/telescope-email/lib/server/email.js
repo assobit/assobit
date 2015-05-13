@@ -1,8 +1,13 @@
+/**
+ * Telescope Email namespace
+ * @namespace Email
+ */
+Telescope.email = {};
 
 var htmlToText = Npm.require('html-to-text');
 
 // check if server-side template has been customized, and return the correct template
-getEmailTemplate = function (template) {
+Telescope.email.getTemplate = function (template) {
   var emailTemplate = Handlebars.templates[template];
   if(typeof emailTemplate === 'function'){
     return Handlebars.templates[template];
@@ -10,44 +15,44 @@ getEmailTemplate = function (template) {
     console.log('Cannot find template '+template+', defaulting to '+template);
     return Handlebars.templates[template];
   }
-}
+};
 
-buildEmailTemplate = function (htmlContent) {
+Telescope.email.buildTemplate = function (htmlContent) {
 
   var emailProperties = {
     secondaryColor: Settings.get('secondaryColor', '#444444'),
     accentColor: Settings.get('accentColor', '#DD3416'),
     siteName: Settings.get('title'),
     tagline: Settings.get('tagline'),
-    siteUrl: getSiteUrl(),
+    siteUrl: Telescope.utils.getSiteUrl(),
     body: htmlContent,
     unsubscribe: '',
-    accountLink: getSiteUrl()+'account',
+    accountLink: Telescope.utils.getSiteUrl()+'account',
     footer: Settings.get('emailFooter'),
     logoUrl: Settings.get('logoUrl'),
     logoHeight: Settings.get('logoHeight'),
     logoWidth: Settings.get('logoWidth')
-  }
+  };
 
-  var emailHTML = Handlebars.templates['emailWrapper'](emailProperties);
+  var emailHTML = Handlebars.templates.emailWrapper(emailProperties);
 
   var inlinedHTML = juice(emailHTML);
 
   var doctype = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">'
 
   return doctype+inlinedHTML;
-}
+};
 
-sendEmail = function(to, subject, html, text){
+Telescope.email.send = function(to, subject, html, text){
 
   // TODO: limit who can send emails
   // TODO: fix this error: Error: getaddrinfo ENOTFOUND
 
   var from = Settings.get('defaultEmail', 'noreply@example.com');
   var siteName = Settings.get('title', 'Telescope');
-  var subject = '['+siteName+'] '+subject;
+  subject = '['+siteName+'] '+subject;
 
-  if (typeof text == 'undefined'){
+  if (typeof text === 'undefined'){
     // Auto-generate text version if it doesn't exist. Has bugs, but should be good enough.
     var text = htmlToText.fromString(html, {
         wordwrap: 130
@@ -67,39 +72,39 @@ sendEmail = function(to, subject, html, text){
     subject: subject,
     text: text,
     html: html
-  }
+  };
 
   Email.send(email);
 
   return email;
 };
 
-buildAndSendEmail = function (to, subject, template, properties) {
-  var html = buildEmailTemplate(getEmailTemplate(template)(properties));
-  return sendEmail (to, subject, html);
-}
+Telescope.email.buildAndSend = function (to, subject, template, properties) {
+  var html = Telescope.email.buildTemplate(Telescope.email.getTemplate(template)(properties));
+  return Telescope.email.send (to, subject, html);
+};
 
 Meteor.methods({
   testEmail: function () {
-    if(isAdminById(this.userId)){
-      var email = buildAndSendEmail (Settings.get('defaultEmail'), 'Telescope email test', 'emailTest', {date: new Date()});
+    if(Users.is.adminById(this.userId)){
+      var email = Telescope.email.buildAndSend (Settings.get('defaultEmail'), 'Telescope email test', 'emailTest', {date: new Date()});
     }
   }
-})
+});
 
 function adminUserCreationNotification (user) {
   // send notifications to admins
-  var admins = adminUsers();
+  var admins = Users.adminUsers();
   admins.forEach(function(admin){
-    if(getUserSetting('notifications.users', false, admin)){
+    if(Users.getUserSetting('notifications.users', false, admin)){
       var emailProperties = {
-        profileUrl: getProfileUrl(user),
-        username: getUserName(user)
+        profileUrl: Users.getProfileUrl(user),
+        username: Users.getUserName(user)
       };
-      var html = getEmailTemplate('emailNewUser')(emailProperties);
-      sendEmail(getEmail(admin), 'New user account: '+getUserName(user), buildEmailTemplate(html));
+      var html = Telescope.email.getTemplate('emailNewUser')(emailProperties);
+      Telescope.email.send(Users.getEmail(admin), 'New user account: '+Users.getUserName(user), Telescope.email.buildTemplate(html));
     }
   });
   return user;
 }
-userCreatedCallbacks.push(adminUserCreationNotification);
+Telescope.callbacks.register("onCreateUser", adminUserCreationNotification);
