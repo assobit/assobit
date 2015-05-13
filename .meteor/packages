@@ -5,9 +5,7 @@
 
 ############ Telescope Core ############
 
-alanning:roles
 gildof:telescope-roles
-telescope:core
 
 ############ Telescope Packages (Optional) ############
 
@@ -39,3 +37,7 @@ telescope:tags
 telescope:theme-base
 telescope:theme-hubble
 telescope:update-prompt
+
+telescope:core
+alanning:roles
+after-sign-up

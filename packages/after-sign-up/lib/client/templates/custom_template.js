@@ -1,9 +1,7 @@
-Meteor.startup(function () {
-
-  Template.customTemplate.helpers({
-    name: function () {
-      return "Bruce Willis";
+Template.fullPageAtForm.events({
+  "click #at-btn": function(e, t) {
+    if (AccountsTemplates.getState() == "signUp") {
+      Router.go("/page/da-compilare")
     }
-  });
-
+  }
 });

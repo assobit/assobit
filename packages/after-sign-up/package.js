@@ -15,13 +15,7 @@ Package.onUse(function (api) {
   // automatic (let the package specify where it's needed)
 
   api.use([
-    'tap:i18n',                   // internationalization package
-    'iron:router',                // routing package
-    'telescope-base',             // basic Telescope hooks and objects
-    'telescope-lib',              // useful functions
-    'telescope-settings',
-    'telescope-i18n',             // internationalization wrapper
-    'fourseven:scss'              // SCSS compilation package
+    'telescope:core',             // basic Telescope hooks and objects
   ]);
 
   // client
