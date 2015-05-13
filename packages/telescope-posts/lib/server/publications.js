@@ -10,7 +10,7 @@ Meteor.publish('postsList', function(terms) {
 
     var newPosts = []
 
-    var userId = this.userId || Meteor.userId()
+    var userId = this.userId
 
     _.each(posts.fetch(), function(p) {
 
@@ -27,7 +27,7 @@ Meteor.publish('postsList', function(terms) {
 
     return Posts.find({_id: {$in: newPosts }})
   }
-  
+
   return [];
 });
 

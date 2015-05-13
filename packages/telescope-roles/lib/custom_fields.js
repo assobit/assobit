@@ -1,12 +1,11 @@
-addToPostSchema.push(
+Posts.registerField(
   {
-    propertyName: 'roles',
-    propertySchema: {
+    fieldName: 'roles',
+    fieldSchema: {
       type: [String],
       optional: true,
-      editable: true,
+      editableBy: ["member", "admin"],
       autoform: {
-        editable: true,
         noselect: true,
         options: function () {
           var roles = Meteor.roles.find().map(function (role) {
@@ -21,3 +20,16 @@ addToPostSchema.push(
     }
   }
 );
+
+
+
+Users.registerField({
+  fieldName: 'roles',
+  fieldSchema: {
+    type: [String],
+    optional: true,
+    autoform: {
+      omit: true
+    }
+  }
+});
