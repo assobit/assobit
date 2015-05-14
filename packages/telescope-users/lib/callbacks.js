@@ -38,8 +38,6 @@ function setupUser (user, options) {
 
   Events.track('new user', {username: user.username, email: user.profile.email});
 
-  Router.go("/page/da-compilare")
-
   return user;
 }
 Telescope.callbacks.register("onCreateUser", setupUser);
