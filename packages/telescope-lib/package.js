@@ -1,7 +1,8 @@
 Package.describe({
   name: 'telescope:lib',
   summary: 'Telescope libraries.',
-  version: '0.3.1'
+  version: '0.20.2',
+  git: "https://github.com/TelescopeJS/Telescope.git"
 });
 
 Package.onUse(function (api) {
@@ -19,7 +20,8 @@ Package.onUse(function (api) {
     'reactive-var',
     'http',
     'email',
-    'aldeed:simple-schema@1.3.2',
+    'spiderable',
+    'aldeed:simple-schema@1.3.3',
     'aldeed:collection2@2.3.3',
     'sacha:autoform@5.1.2',
     'aldeed:template-extension@3.4.3',
@@ -40,12 +42,13 @@ Package.onUse(function (api) {
     'momentjs:moment@2.10.3',
     'sacha:spin@0.2.4',
     'aslagle:reactive-table@0.7.3',
-    'bengott:avatar@0.7.6',
+    'utilities:avatar@0.7.8',
     'fortawesome:fontawesome@4.3.0',
     'ccan:cssreset@1.0.0',
     'djedi:sanitize-html@1.6.1',
     'dburles:collection-helpers@1.0.3',
-    'jparker:gravatar@0.3.1'
+    'jparker:gravatar@0.3.1',
+    'sanjo:meteor-files-helpers@1.1.0_4'
   ];
 
   api.use(packages);

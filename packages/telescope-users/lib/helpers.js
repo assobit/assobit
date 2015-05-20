@@ -40,7 +40,7 @@ Users.getDisplayNameById = function (userId) {return Users.getDisplayName(Meteor
  * @param {Object} user
  */
 Users.getProfileUrl = function (user) {
-  return this.getProfileUrlBySlugOrId(user.telescope.slug);
+  return Users.getProfileUrlBySlugOrId(user.telescope.slug);
 };
 Users.helpers({getProfileUrl: function () {return Users.getProfileUrl(this);}});
 
@@ -248,7 +248,7 @@ Users.getSubParams = function(filterBy, sortBy, limit) {
 
 
 Users.updateAdmin = function (userId, admin) {
-  this.update(userId, {$set: {isAdmin: admin}});
+  Users.update(userId, {$set: {isAdmin: admin}});
 };
 
 Users.adminUsers = function () {
@@ -258,3 +258,33 @@ Users.adminUsers = function () {
 Users.getCurrentUserEmail = function () {
   return Meteor.user() ? Users.getEmail(Meteor.user()) : '';
 };
+
+Users.findByEmail = function (email) {
+  return Meteor.users.findOne({"emails.address": email});
+}
+
+
+/**
+ * @method Users.getRequiredFields
+ * Get a list of all fields required for a profile to be complete.
+ */
+Users.getRequiredFields = function () {
+  var schema = Users.simpleSchema()._schema;
+  var fields = _.filter(_.keys(schema), function (fieldName) {
+    var field = schema[fieldName];
+    return !!field.required;
+  });
+  return fields;
+};
+
+/**
+ * Check if the user has completed their profile.
+ * @param {Object} user
+ */
+Users.hasCompletedProfile = function (user) {
+  return _.every(Users.getRequiredFields(), function (fieldName) {
+    return !!Telescope.getNestedProperty(user, fieldName);
+  });
+};
+Users.helpers({hasCompletedProfile: function () {return Users.hasCompletedProfile(this);}});
+Users.hasCompletedProfileById = function (userId) {return Users.hasCompletedProfile(Meteor.users.findOne(userId));};
