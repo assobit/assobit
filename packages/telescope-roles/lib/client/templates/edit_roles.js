@@ -18,6 +18,9 @@ Meteor.startup(function () {
 
       var role = event.target.id;
 
+      console.log("XCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+      console.log(event.target.id)
+
       Meteor.call("removeRole", Meteor.users.findOne({slug: Session.get("userSlug")})._id, role);
 
       // Prevent default form submit

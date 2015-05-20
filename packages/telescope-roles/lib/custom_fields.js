@@ -1,4 +1,4 @@
-Posts.registerField(
+Posts.addField(
   {
     fieldName: 'roles',
     fieldSchema: {
@@ -23,13 +23,15 @@ Posts.registerField(
 
 
 
-Users.registerField({
+Users.addField({
   fieldName: 'roles',
+  editableBy: ["member", "admin"],
+
   fieldSchema: {
     type: [String],
     optional: true,
     autoform: {
-      omit: true
+      omit: false
     }
   }
 });
