@@ -115,8 +115,7 @@ Meteor.startup(function () {
 
   Router.route('/users-dashboard', {
     controller: Telescope.controllers.admin,
-    name: 'usersDashboard'
-    // template: 'users'
+    name: 'users_dashboard'
   });
 
   // Unsubscribe (from notifications)

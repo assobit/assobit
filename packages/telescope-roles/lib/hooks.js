@@ -1,4 +1,4 @@
-Telescope.modules.register("profileEdit", {
+Telescope.modules.add("profileEdit", {
   template: 'editRoles',
   order: 99
 });
